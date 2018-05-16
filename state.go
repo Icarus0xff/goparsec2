@@ -13,6 +13,7 @@ type State interface {
 	Rollback(int)
 	Context(interface{})
 	ReturnContex() interface{}
+	ResetContex()
 }
 
 // BasicState 实现最基本的 State 操作
