@@ -7,6 +7,9 @@ import (
 // P 是算子的公共抽象类型，实现 Monad 和解析逻辑
 type P func(state State) (interface{}, error)
 
+// PFunc 是P的别名
+type PFunc = P
+
 //Parse 简单的调用被封装的算子逻辑
 func (p P) Parse(state State) (interface{}, error) {
 	return p(state)

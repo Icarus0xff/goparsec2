@@ -11,13 +11,16 @@ type State interface {
 	Begin() int
 	Commit(int)
 	Rollback(int)
+	Context(interface{})
+	ReturnContex() interface{}
 }
 
 // BasicState 实现最基本的 State 操作
 type BasicState struct {
-	buffer []interface{}
-	index  int
-	begin  int
+	buffer  []interface{}
+	index   int
+	begin   int
+	context interface{}
 }
 
 // NewBasicState 构造一个新的 BasicState
@@ -28,6 +31,7 @@ func NewBasicState(data []interface{}) BasicState {
 		buffer,
 		0,
 		-1,
+		nil,
 	}
 }
 
@@ -42,6 +46,7 @@ func BasicStateFromText(str string) BasicState {
 		buffer,
 		0,
 		-1,
+		nil,
 	}
 }
 
@@ -95,6 +100,21 @@ func (state *BasicState) Rollback(tran int) {
 	if state.begin == tran {
 		state.begin = -1
 	}
+}
+
+// Context 保存上下文信息
+func (state *BasicState) Context(contex interface{}) {
+	state.context = contex
+}
+
+// ReturnContex 获取当前的上下文
+func (state *BasicState) ReturnContex() interface{} {
+	return state.context
+}
+
+// ResetContex 重置当前的上下文
+func (state *BasicState) ResetContex() {
+	state.context = nil
 }
 
 // Error 实现基本的错误信息结构
